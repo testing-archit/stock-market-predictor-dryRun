@@ -152,7 +152,7 @@ def train_model(ticker, market='US', start_date=None, end_date=None):
         
         model.fit(
             X_train, y_train,
-            epochs=100,
+            epochs=20,
             batch_size=32,
             validation_data=(X_val, y_val),
             callbacks=[checkpoint],
