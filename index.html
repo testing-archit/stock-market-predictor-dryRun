@@ -3,244 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Price Prediction</title>
+    <title>Advanced Stock Price Prediction</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background-color: #f0f2f5;
-            padding: 20px;
+            background-color: #f8fafc;
             min-height: 100vh;
+            padding: 2rem;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background-color: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
 
         h1 {
             text-align: center;
-            color: #1a1a1a;
-            margin-bottom: 30px;
-            font-size: 2.5em;
+            color: #0f172a;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
         }
 
         .description {
             text-align: center;
-            color: #666;
-            margin-bottom: 30px;
+            color: #475569;
+            margin-bottom: 2rem;
             line-height: 1.6;
+            max-width: 42rem;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .input-section {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            justify-content: center;
-            align-items: start;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .input-group {
-            flex: 1;
-            min-width: 200px;
-            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #444;
+            color: #334155;
             font-weight: 500;
+            font-size: 0.875rem;
         }
 
         input, select {
-            width: 100%;
-            padding: 12px 20px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background-color: white;
         }
 
         input:focus, select:focus {
             outline: none;
-            border-color: #2196F3;
-            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+            border-color: #3b82f6;
+            ring: 2px solid #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .button-group {
             display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 24px;
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
         button {
-            padding: 12px 25px;
+            flex: 1;
+            padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
+            border-radius: 0.5rem;
             font-weight: 600;
-            transition: all 0.3s ease;
-            min-width: 150px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         button:disabled {
-            background-color: #ccc !important;
+            opacity: 0.5;
             cursor: not-allowed;
-            opacity: 0.7;
         }
 
         .train-btn {
-            background-color: #4CAF50;
+            background-color: #22c55e;
             color: white;
         }
 
         .train-btn:hover:not(:disabled) {
-            background-color: #45a049;
+            background-color: #16a34a;
         }
 
         .predict-btn {
-            background-color: #2196F3;
+            background-color: #3b82f6;
             color: white;
         }
 
         .predict-btn:hover:not(:disabled) {
-            background-color: #1976D2;
+            background-color: #2563eb;
         }
 
         .loading {
             display: none;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            background-color: #f8fafc;
             text-align: center;
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 8px;
-            background-color: #f8f9fa;
         }
 
         .loading.active {
-            display: block;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { background-color: #f8f9fa; }
-            50% { background-color: #e9ecef; }
-            100% { background-color: #f8f9fa; }
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
         }
 
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #2196F3;
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #3b82f6;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 10px auto;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
 
         .message {
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin: 15px 0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
             display: none;
         }
 
         .message.active {
             display: block;
-            animation: slideIn 0.3s ease-out;
+            animation: slideIn 0.3s ease;
         }
 
         @keyframes slideIn {
-            from { transform: translateY(-10px); opacity: 0; }
+            from { transform: translateY(-0.5rem); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
         .error {
-            background-color: #ffebee;
-            color: #c62828;
-            border: 1px solid #ffcdd2;
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
         }
 
         .success {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            border: 1px solid #c8e6c9;
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
         }
 
         .chart-container {
-            margin-top: 30px;
+            margin-top: 2rem;
             height: 400px;
             position: relative;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .chart-placeholder {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #666;
-            text-align: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
         }
 
         .ticker-suggestions {
-            margin-top: 10px;
-            font-size: 0.9em;
-            color: #666;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
         }
 
         .ticker-suggestions span {
-            background-color: #e3f2fd;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin: 0 5px;
+            background-color: #eff6ff;
+            color: #1e40af;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
             cursor: pointer;
-            display: inline-block;
-            margin-bottom: 5px;
+            transition: background-color 0.2s;
         }
 
         .ticker-suggestions span:hover {
-            background-color: #bbdefb;
+            background-color: #dbeafe;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem;
+            }
+
             .container {
-                padding: 20px;
+                padding: 1rem;
             }
 
-            .input-section {
+            .button-group {
                 flex-direction: column;
-            }
-
-            .input-group {
-                width: 100%;
-                max-width: none;
-            }
-
-            button {
-                width: 100%;
             }
 
             .chart-container {
@@ -253,42 +234,51 @@
     <div class="container">
         <h1>Stock Price Prediction</h1>
         <p class="description">
-            Enter a stock ticker symbol to train the model and predict future stock prices.
-            Select your market and enter the ticker symbol accordingly.
+            Enter a stock ticker symbol and use our AI-powered model to predict future stock prices. 
+            Select your market and enter the appropriate ticker symbol to get started.
         </p>
         
         <div class="input-section">
             <div class="input-group">
-                <label for="market">Select Market</label>
+                <label for="market">Market</label>
                 <select id="market" class="market-selector">
                     <option value="US">US Stock Market</option>
                     <option value="BSE">Indian BSE</option>
                     <option value="NSE">Indian NSE</option>
                 </select>
             </div>
+            
             <div class="input-group">
-                <label for="ticker">Stock Ticker Symbol</label>
+                <label for="ticker">Ticker Symbol</label>
                 <input 
                     type="text" 
                     id="ticker" 
-                    placeholder="e.g., AAPL, RELIANCE.BO, INFY.NS" 
+                    placeholder="e.g., AAPL, GOOGL" 
                     autocomplete="off"
                 />
                 <div class="ticker-suggestions">
-                    US Market: 
                     <span onclick="setTicker('AAPL')">AAPL</span>
                     <span onclick="setTicker('GOOGL')">GOOGL</span>
                     <span onclick="setTicker('MSFT')">MSFT</span>
-                    <br>
-                    Indian Market:
-                    <span onclick="setTicker('RELIANCE')">RELIANCE</span>
-                    <span onclick="setTicker('TCS')">TCS</span>
-                    <span onclick="setTicker('INFY')">INFY</span>
+                    <span onclick="setTicker('TSLA')">TSLA</span>
                 </div>
             </div>
+
             <div class="button-group">
-                <button id="trainBtn" class="train-btn">Train Model</button>
-                <button id="predictBtn" class="predict-btn">Predict</button>
+                <button id="trainBtn" class="train-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+                        <path d="M21 3v5h-5"/>
+                    </svg>
+                    Train Model
+                </button>
+                <button id="predictBtn" class="predict-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    Predict
+                </button>
             </div>
         </div>
 
@@ -297,94 +287,379 @@
         
         <div id="loading" class="loading">
             <div class="spinner"></div>
-            <p id="loadingText">Processing...</p>
+            <span id="loadingText">Processing...</span>
         </div>
 
         <div class="chart-container">
             <canvas id="predictionChart"></canvas>
-            <div id="chartPlaceholder" class="chart-placeholder">
-                Predictions will appear here
-            </div>
         </div>
     </div>
 
     <script>
+        // DOM Elements
+        const marketSelect = document.getElementById('market');
+        const tickerInput = document.getElementById('ticker');
         const trainBtn = document.getElementById('trainBtn');
         const predictBtn = document.getElementById('predictBtn');
-        const tickerInput = document.getElementById('ticker');
-        const marketSelect = document.getElementById('market');
-        const loading = document.getElementById('loading');
+        const loadingDiv = document.getElementById('loading');
         const loadingText = document.getElementById('loadingText');
-        const error = document.getElementById('error');
-        const success = document.getElementById('success');
-        const chartPlaceholder = document.getElementById('chartPlaceholder');
+        const errorDiv = document.getElementById('error');
+        const successDiv = document.getElementById('success');
+
+        // Chart instance
         let chart = null;
 
+        // API Configuration
         const API_BASE_URL = 'http://localhost:5020';
 
-        function setTicker(symbol) {
-            tickerInput.value = symbol;
-        }
-
+        // Utility Functions
         function showLoading(message) {
-            loading.classList.add('active');
             loadingText.textContent = message;
+            loadingDiv.classList.add('active');
             trainBtn.disabled = true;
             predictBtn.disabled = true;
-            chartPlaceholder.style.display = 'none';
         }
 
         function hideLoading() {
-            loading.classList.remove('active');
+            loadingDiv.classList.remove('active');
             trainBtn.disabled = false;
             predictBtn.disabled = false;
         }
 
-        function showMessage(element, message) {
-            element.textContent = message;
-            element.classList.add('active');
-            setTimeout(() => {
-                element.classList.remove('active');
-            }, 5000);
-        }
-
         function showError(message) {
-            showMessage(error, message);
+            errorDiv.textContent = message;
+            errorDiv.classList.add('active');
+            successDiv.classList.remove('active');
+            setTimeout(() => errorDiv.classList.remove('active'), 5000);
         }
 
         function showSuccess(message) {
-            showMessage(success, message);
+            successDiv.textContent = message;
+            successDiv.classList.add('active');
+            errorDiv.classList.remove('active');
+            setTimeout(() => successDiv.classList.remove('active'), 5000);
         }
 
-        function createChart(predictions) {
-            const ctx = document.getElementById('predictionChart').getContext('2d');
-            
-            if (chart) {
-                chart.destroy();
+        function setTicker(ticker) {
+            tickerInput.value = ticker;
+            predictBtn.disabled = false;
+        }
+
+        // Chart Functions
+        function updateChart(dates, predictions, ticker) {
+    console.log('Updating chart with:', {
+        dates: dates,
+        predictions: predictions,
+        ticker: ticker
+    });
+
+    if (chart) {
+        console.log('Destroying existing chart');
+        chart.destroy();
+    }
+
+    const ctx = document.getElementById('predictionChart').getContext('2d');
+    console.log('Chart context:', ctx);
+
+    try {
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: `Predicted Price for ${ticker} ($)`,
+                    data: predictions,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: `30-Day Price Prediction for ${ticker}`,
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Price ($)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return new Intl.NumberFormat('en-US', {
+                                    style: 'currency',
+                                    currency: 'USD'
+                                }).format(value);
+                            }
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    }
+                }
+            }
+        });
+        console.log('Chart created successfully');
+    } catch (error) {
+        console.error('Error creating chart:', error);
+        showError('Failed to create chart: ' + error.message);
+    }
+}
+        // API Functions
+        async function trainModel() {
+    const ticker = tickerInput.value.trim();
+    const market = marketSelect.value;  // Get selected market
+    
+    if (!ticker) {
+        showError('Please enter a ticker symbol');
+        return;
+    }
+
+    showLoading('Training model...');
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/train`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                ticker,
+                market  // Include market in request
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to train model');
+        }
+
+        showSuccess('Model trained successfully!');
+        predictBtn.disabled = false;
+
+    } catch (error) {
+        showError(error.message);
+        predictBtn.disabled = true;
+    } finally {
+        hideLoading();
+    }
+}
+
+async function predict() {
+    const ticker = tickerInput.value.trim();
+    const market = marketSelect.value;  // Get selected market
+    
+    if (!ticker) {
+        showError('Please enter a ticker symbol');
+        return;
+    }
+
+    showLoading('Making predictions...');
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/predict`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                ticker,
+                market  // Include market in request
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to get predictions');
+        }
+
+        updateChart(data.dates, data.predictions, `${ticker} (${market})`);
+        showSuccess('Predictions generated successfully!');
+
+    } catch (error) {
+        showError(error.message);
+    } finally {
+        hideLoading();
+    }
+}
+
+// Update market change handler to include proper ticker formats
+marketSelect.addEventListener('change', function() {
+    const market = this.value;
+    const suggestionsDiv = document.querySelector('.ticker-suggestions');
+    
+    if (market === 'US') {
+        suggestionsDiv.innerHTML = `
+            <span onclick="setTicker('AAPL')">AAPL</span>
+            <span onclick="setTicker('GOOGL')">GOOGL</span>
+            <span onclick="setTicker('MSFT')">MSFT</span>
+            <span onclick="setTicker('TSLA')">TSLA</span>
+        `;
+    } else if (market === 'BSE') {
+        suggestionsDiv.innerHTML = `
+            <span onclick="setTicker('TCS')">TCS</span>
+            <span onclick="setTicker('RELIANCE')">RELIANCE</span>
+            <span onclick="setTicker('INFY')">INFY</span>
+            <span onclick="setTicker('HDFCBANK')">HDFCBANK</span>
+        `;
+    } else if (market === 'NSE') {
+        suggestionsDiv.innerHTML = `
+            <span onclick="setTicker('NIFTY')">NIFTY</span>
+            <span onclick="setTicker('SENSEX')">SENSEX</span>
+            <span onclick="setTicker('BANKNIFTY')">BANKNIFTY</span>
+            <span onclick="setTicker('FINNIFTY')">FINNIFTY</span>
+        `;
+    }
+    
+    // Clear current input and reset buttons
+    tickerInput.value = '';
+    predictBtn.disabled = true;
+    if (chart) {
+        chart.destroy();
+        chart = null;
+    }
+});
+        async function predict() {
+            const ticker = tickerInput.value.trim();
+            if (!ticker) {
+                showError('Please enter a ticker symbol');
+                return;
             }
 
-            chartPlaceholder.style.display = 'none';
+            showLoading('Making predictions...');
 
-            const dates = predictions.map((_, index) => {
-                const date = new Date();
-                date.setDate(date.getDate() + index);
-                return date.toLocaleDateString();
-            });
+            try {
+                const response = await fetch(`${API_BASE_URL}/predict`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ticker })
+                });
 
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to get predictions');
+                }
+
+                updateChart(data.dates, data.predictions, ticker);
+                showSuccess('Predictions generated successfully!');
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Event Listeners
+        trainBtn.addEventListener('click', trainModel);
+        predictBtn.addEventListener('click', predict);
+
+        tickerInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                if (!predictBtn.disabled) {
+                    predict();
+                } else {
+                    trainModel();
+                }
+            }
+        });
+
+        marketSelect.addEventListener('change', function() {
+            const market = this.value;
+            const suggestionsDiv = document.querySelector('.ticker-suggestions');
+            
+            if (market === 'US') {
+                suggestionsDiv.innerHTML = `
+                  
+        
+                    <span onclick="setTicker('AAPL')">AAPL</span>
+                    <span onclick="setTicker('GOOGL')">GOOGL</span>
+                    <span onclick="setTicker('MSFT')">MSFT</span>
+                    <span onclick="setTicker('TSLA')">TSLA</span>
+                `;
+            } else if (market === 'BSE') {
+                suggestionsDiv.innerHTML = `
+                    <span onclick="setTicker('TCS')">TCS</span>
+                    <span onclick="setTicker('RELIANCE')">RELIANCE</span>
+                    <span onclick="setTicker('INFY')">INFY</span>
+                    <span onclick="setTicker('HDFCBANK')">HDFCBANK</span>
+                `;
+            } else if (market === 'NSE') {
+                suggestionsDiv.innerHTML = `
+                    <span onclick="setTicker('NIFTY')">NIFTY</span>
+                    <span onclick="setTicker('SENSEX')">SENSEX</span>
+                    <span onclick="setTicker('BANKNIFTY')">BANKNIFTY</span>
+                    <span onclick="setTicker('FINNIFTY')">FINNIFTY</span>
+                `;
+            }
+            
+            // Clear current input and reset buttons
+            tickerInput.value = '';
+            predictBtn.disabled = true;
+            if (chart) {
+                chart.destroy();
+                chart = null;
+            }
+        });
+
+        // Input validation
+        tickerInput.addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+            if (this.value.length > 5) {
+                this.value = this.value.slice(0, 5);
+            }
+            // Only allow letters
+            this.value = this.value.replace(/[^A-Z]/g, '');
+            
+            // Enable/disable predict button based on input
+            predictBtn.disabled = !this.value;
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Reset the form
+            tickerInput.value = '';
+            predictBtn.disabled = true;
+            
+            // Create empty chart
+            const ctx = document.getElementById('predictionChart').getContext('2d');
             chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: dates,
+                    labels: [],
                     datasets: [{
                         label: 'Predicted Price ($)',
-                        data: predictions,
-                        borderColor: '#2196F3',
-                        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                        data: [],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
                         borderWidth: 2,
                         fill: true,
-                        tension: 0.4,
-                        pointRadius: 4,
-                        pointHoverRadius: 6
+                        tension: 0.4
                     }]
                 },
                 options: {
@@ -393,21 +668,28 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: `Stock Price Predictions for ${tickerInput.value.toUpperCase()}`,
+                            text: 'Enter a ticker symbol to begin',
                             font: {
                                 size: 16,
                                 weight: 'bold'
                             }
-                        },
-                        legend: {
-                            position: 'top',
                         },
                         tooltip: {
                             mode: 'index',
                             intersect: false,
                             callbacks: {
                                 label: function(context) {
-                                    return `Price: $${context.raw.toFixed(2)}`;
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', {
+                                            style: 'currency',
+                                            currency: 'USD'
+                                        }).format(context.parsed.y);
+                                    }
+                                    return label;
                                 }
                             }
                         }
@@ -421,7 +703,11 @@
                             },
                             ticks: {
                                 callback: function(value) {
-                                    return '$' + value.toFixed(2);
+                                    return new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD',
+                                        minimumFractionDigits: 2
+                                    }).format(value);
                                 }
                             }
                         },
@@ -438,151 +724,19 @@
                     }
                 }
             });
-        }
+        });
 
-        function validateTicker() {
-            const ticker = tickerInput.value.trim().toUpperCase();
-            const market = marketSelect.value;
-            
-            if (!ticker) {
-                showError('Please enter a ticker symbol');
-                return false;
-            }
-
-            // Remove any existing .BO or .NS extensions first
-            const cleanTicker = ticker.replace(/\.(BO|NS)$/, '');
-
-            const validationRules = {
-                'US': /^[A-Z]{1,5}$/,
-                'BSE': /^[A-Z]{1,10}$/,
-                'NSE': /^[A-Z]{1,10}$/
-            };
-
-            if (!validationRules[market].test(cleanTicker)) {
-                let errorMessage = 'Invalid ticker format. ';
-                switch(market) {
-                    case 'US':
-                        errorMessage += 'US tickers should be 1-5 capital letters.';
-                        break;
-                    case 'BSE':
-                    case 'NSE':
-                        errorMessage += 'Indian tickers should be 1-10 capital letters.';
-                        break;
-                }
-                showError(errorMessage);
-                return false;
-            }
-
-            // Add the appropriate extension if needed
-            let formattedTicker = cleanTicker;
-            if (market === 'BSE' && !ticker.endsWith('.BO')) {
-                formattedTicker += '.BO';
-            } else if (market === 'NSE' && !ticker.endsWith('.NS')) {
-                formattedTicker += '.NS';
-            }
-
-            console.log('Formatted ticker:', formattedTicker); // For debugging
-            return formattedTicker;
-        }
-
-        async function handleAPIRequest(endpoint, ticker) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ ticker }) // Removed market field
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || `${endpoint} failed`);
-                }
-
-                return data;
-            } catch (error) {
-                console.error(`Error in ${endpoint}:`, error);
-                throw new Error(error.message || 'An unexpected error occurred');
-            }
-        }
-
-        async function trainModel() {
-            const validatedTicker = validateTicker();
-            if (!validatedTicker) return;
-
-            showLoading('Training model... This may take a few minutes');
-            try {
-                const data = await handleAPIRequest('train', validatedTicker);
-                showSuccess('Model trained successfully!');
-                predictBtn.disabled = false;
-            } catch (error) {
-                showError(error.message);
-            } finally {
-                hideLoading();
-            }
-        }
-
-        async function predict() {
-            const validatedTicker = validateTicker();
-            if (!validatedTicker) return;
-
-            showLoading('Generating predictions...');
-            try {
-                const data = await handleAPIRequest('predict', validatedTicker);
-                if (data.predictions && data.predictions.length > 0) {
-                    createChart(data.predictions);
-                    showSuccess('Predictions generated successfully!');
-                } else {
-                    throw new Error('No prediction data received');
-                }
-            } catch (error) {
-                showError(error.message);
-                chartPlaceholder.style.display = 'block';
-            } finally {
-                hideLoading();
-            }
-        }
-
-        // Event Listeners
-        trainBtn.addEventListener('click', trainModel);
-        predictBtn.addEventListener('click', predict);
-        
-        // Initialize
-        predictBtn.disabled = true; // Disable predict button until model is trained
-        
-        // Handle Enter key in ticker input
-        tickerInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                if (!predictBtn.disabled) {
-                    predict();
-                } else {
-                    trainModel();
-                }
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (chart) {
+                chart.resize();
             }
         });
 
-        // Update ticker format based on market selection
-        marketSelect.addEventListener('change', function() {
-            const market = this.value;
-            let placeholder;
-            
-            switch(market) {
-                case 'US':
-                    placeholder = 'e.g., AAPL, GOOGL, MSFT';
-                    break;
-                case 'BSE':
-                    placeholder = 'e.g., RELIANCE.BO, TCS.BO';
-                    break;
-                case 'NSE':
-                    placeholder = 'e.g., INFY.NS, TCS.NS';
-                    break;
-            }
-            
-            tickerInput.placeholder = placeholder;
+        // Error handling for failed API connections
+        window.addEventListener('unhandledrejection', function(event) {
+            showError('Failed to connect to the server. Please check your connection and try again.');
+            hideLoading();
         });
     </script>
 </body>
