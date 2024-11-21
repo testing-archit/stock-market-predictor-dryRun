@@ -4,7 +4,7 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.models import Sequential, load_model 
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 import logging
 from datetime import datetime, timedelta
@@ -32,7 +32,7 @@ class Config:
     FUTURE_DAYS = 30
     TRAINING_YEARS = 2
     BATCH_SIZE = 32
-    EPOCHS = 50
+    EPOCHS = 150
     VALIDATION_SPLIT = 0.1
     VALID_TICKERS_PATTERN = r'^[A-Z]{1,5}$'
 
