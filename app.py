@@ -30,7 +30,7 @@ class Config:
     SCALER_FOLDER = 'saved_scalers'
     SEQUENCE_LENGTH = 60
     FUTURE_DAYS = 30
-    TRAINING_YEARS = 2
+    TRAINING_YEARS = 10
     BATCH_SIZE = 32
     EPOCHS = 150
     VALIDATION_SPLIT = 0.1
