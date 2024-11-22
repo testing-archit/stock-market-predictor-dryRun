@@ -30,9 +30,9 @@ class Config:
     SCALER_FOLDER = 'saved_scalers'
     SEQUENCE_LENGTH = 60
     FUTURE_DAYS = 30
-    TRAINING_YEARS = 10
+    TRAINING_YEARS = 2
     BATCH_SIZE = 32
-    EPOCHS = 150
+    EPOCHS = 50
     VALIDATION_SPLIT = 0.1
     VALID_TICKERS_PATTERN = r'^[A-Z]{1,5}$'
 
