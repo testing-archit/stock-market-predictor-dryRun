@@ -34,7 +34,7 @@ class Config:
     BATCH_SIZE = 32
     EPOCHS = 50
     VALIDATION_SPLIT = 0.1
-    VALID_TICKERS_PATTERN = r'^[A-Z]{1,5}$'
+    VALID_TICKERS_PATTERN = r'^[A-Z]{1,10}$'
 
 # Create directories
 os.makedirs(Config.MODEL_FOLDER, exist_ok=True)

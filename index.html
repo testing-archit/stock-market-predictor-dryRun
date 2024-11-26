@@ -630,8 +630,8 @@ marketSelect.addEventListener('change', function() {
         // Input validation
         tickerInput.addEventListener('input', function() {
             this.value = this.value.toUpperCase();
-            if (this.value.length > 5) {
-                this.value = this.value.slice(0, 5);
+            if (this.value.length > 10) {
+                this.value = this.value.slice(0, 10);
             }
             // Only allow letters
             this.value = this.value.replace(/[^A-Z]/g, '');
